@@ -1151,11 +1151,9 @@ function displaySoilResult(a) {
     el("runClimateDiagram").style.display = "block";
     el("runmodel").innerHTML = '<input type="button" id="BtnRun" value="Run Model" onclick="javascript:RunModel();" class="ui-button ui-widget ui-state-default ui-corner-all" role="button" aria-disabled="false" />';
     el("td_SoilResult").style.display = "";
-    el('SoilResults').innerHTML = "<h3>Soil File</h3><p style='text-align:justify; padding-left: 15%; padding-right:15%;'>Here we use the Harmonized World Soil Database (HWSD), the most up-to-date world soil map \n\
+    el('SoilResults').innerHTML = "<h3>Soil File</h3><br/><p style='text-align:justify; padding-left: 15%; padding-right:15%;'>Here we use the Harmonized World Soil Database (HWSD), the most up-to-date world soil map \n\
     (FAO, 2012). It incorporates a data table of 48,148 soil profile descriptions related to the various soils associated with each mapping unit, at a spatial resolution of 30 \n\
-    arc-seconds (approximately 1 km at the  equator).</br></br>\n\
-    For each point sampled there are not necessarily profile data available. Thus the most representative profile was selected from the 48,148 for each soil type retrieved from  \n\
-    the map, see <a href='docs/JonesSoilsGcmAgSys2015.pdf' target='_new'>Jones & Thornton (2015)</a>.</p>  \n\
+    arc-seconds (approximately 1 km at the  equator).</p>  \n\
     <a target='_blank' href='http://gisweb.ciat.cgiar.org/arcgis/rest/directories/arcgisjobs/soils_gpserver/" + a.jobId + "/scratch/soilzip.zip'>  \n\
         <img src='images/ZIPx64.png' style='width: 80px; margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; border-top-width: 0px; border-right-width: 0px; border-bottom-width: 0px; border-left-width: 0px; border-top-style: none; border-right-style: none; border-bottom-style: none; border-left-style: none;'>\n\
     </a>";

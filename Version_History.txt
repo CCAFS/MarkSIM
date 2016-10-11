@@ -1,0 +1,6 @@
+marksimgcm-20160727.zip - MarkSIM GCM With Google Maps
+marksimgcm-20160824.zip - Fixes on help buttons and mouse over the map, in addition this version works for IE
+marksimgcm-20160902.zip - MarkSim with the warning on IE
+marksimgcm-21060906.zip - This version adds a tag to set IE to version 11. Hopefully this will allow IE users to use the application without much trouble
+marksimgcm-20160908.zip - "How to use it" pop up fixed
+marksimgcm-20160922.zip - This version corrects the index on the models
