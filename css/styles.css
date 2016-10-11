@@ -1,0 +1,436 @@
+body {
+  width:100%;
+  height:100%;
+  background-color: #FFF;
+  /*background: -webkit-linear-gradient(white 10%, #000);
+  background: -moz-linear-gradient(0deg, black, white 87%);
+  background: linear-gradient(0deg, black, white 87%);
+  background: -o-linear-gradient(0deg, black, white 87%);
+  background: -ms-linear-gradient(top, rgba(255,255,255,1) 17%,rgba(110,119,116,1) 40%,rgba(10,14,10,1) 55%,rgba(10,8,9,1) 100%); 
+ */ 
+  /*background: -ms-linear-gradient(white 10%, #000);*/
+  /*filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#000000');*/
+  overflow-x:hidden;
+
+}
+
+A  {text-decoration:underline; color: #0404B4}
+A:hover    {text-decoration:underline; color: #B10000}
+
+p {
+font-family: Verdana, Arial, Helvetica, sans-serif;
+font-size: 8pt;
+color: #4D4D4D; 
+/*color: #FFFFFF;*/
+}
+
+td {
+font-family: Verdana, Arial, Helvetica, sans-serif;
+font-size: 8pt;
+/* color: #4D4D4D; */
+color: #FFFFFF;
+}
+
+h1 {
+font-family: Verdana, Arial, Helvetica, sans-serif;
+/* color: #3986C2; */
+color : 3986C2;
+font-size: 14pt;
+}
+
+.cleanlink a {
+	color: #3986C2;
+	text-decoration: none;
+}
+
+h2 {
+font-family: Verdana, Arial, Helvetica, sans-serif;
+color: #3986C2;
+font-size: 11pt;
+}
+
+h3 {
+font-family: Verdana, Arial, Helvetica, sans-serif;
+color: #4D4D4D;
+font-size: 10pt;
+}
+
+h4 {
+font-family: Verdana, Arial, Helvetica, sans-serif;
+color: #4D4D4D;
+font-size: 9pt;
+}
+h5{
+font-family: Verdana, Arial, Helvetica, sans-serif;
+color: #FF0000;
+font-size: 8pt;
+}
+
+
+li {
+	padding-bottom: 5px;
+}
+
+li a {
+	color: #0000CC;
+	font-weight: bold;
+	text-decoration: none;
+}
+
+li.soft a {
+	font-weight: normal;
+}
+
+
+#time {float:right;margin:10px 20px 0px 20px;}
+input.small {vertical-align: middle; height: 11px; width: 11px; margin: 2px;}
+.panel {
+	margin:0px 0px 0px 0px;
+	text-align: center;
+	background:#000;
+}
+#pluginversion {position:absolute;float:right;margin:10px 20px 0px 20px;}
+
+.modeldescript {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	color: gray;
+	font-size: 7.5pt;
+	margin:5px 5px 0px 5px;
+	width:150px;
+}
+
+.rss-popup {
+    margin: 80px;
+    padding: 0;
+    width: 100px;
+    position: relative;
+}
+ 
+div.rss-popup em {
+    background: url('../images/bubble.png') no-repeat;
+    width: 100px;
+    height: 60px;
+    position: absolute;
+    top: 120px;
+    left: 120px;
+    text-align: center;
+    text-indent: 3px;
+	z-index: 1;
+    display: none;
+}
+ 
+#rss-icon {
+    width: 231px;
+    height: 60px;
+    background: url('../images/ilri_logo2.png') no-repeat 0 0;
+    text-indent: -9999px;
+    margin: 0;
+    display: block;
+    
+}
+
+#formatOptions { margin-top: 2em; }
+
+
+.filelist {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 9pt;
+	margin:2px 2px 0px 2px; 
+	/* width:150px;*/
+	height:345px;
+	overflow: auto;
+	border: 1px solid #AAAAAA;
+	color: #222222;
+	background:#FFFFFF;
+	-moz-border-radius: 4px 4px 4px 4px;
+}
+.filelist a  {text-decoration:none; color: #2E9AFE}
+.filelist a:hover {text-decoration:underline; color: blue}
+
+p.egiron  {
+	color: #ccc;
+	font-size: 0.5em;
+	font-style: italic;
+	margin:0px;
+	/*margin-bottom: 10px;*/
+	padding-top: 0px;
+	margin-top: 3px;
+	/*width: 290px;
+	position: absolute;
+	right: 80px;*/
+}
+.egiron a  {text-decoration:none; color: #DFDFDF}
+.egiron a:hover {text-decoration:underline; color: #000}
+
+
+#logos{
+	width:100%;
+	text-align: center;
+	padding-top:8px;
+	padding-bottom: 5px;
+}
+.logoCCAFS {
+	background: url(../images/logo_ccafs.png);
+	background-repeat: no-repeat;
+	display: inline-block;
+	height:60px;
+	width:200px;
+	vertical-align:top;
+	/*
+	margin:2px 2px 0px 20px;
+	float:right;
+	position: relative;
+	top: 8px;
+	right: -60px;*/
+
+}
+
+.logoILRI{
+	background: url(../images/ILRI-logo.png);
+	background-repeat: no-repeat;
+	width:105px;
+	height:60px;
+	vertical-align:top;
+	display: inline-block;
+}
+
+.logoCIAT{
+	background: url(../images/logoCIAT_w.png);
+	background-repeat: no-repeat;
+	width:119px;
+	height:60px;
+	vertical-align:top;
+	display: inline-block;
+}
+
+.titleApp {
+	display: inline-block;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 19pt;
+	font-weight:bold;
+	color:#000;
+	text-shadow: 2px 3px 5px #ccc;
+	text-align:center;
+	width:765px;
+	vertical-align: top;
+	position: relative;
+	left: 0px;
+	z-index: 2;
+	top: 0px;
+	user-select: none;
+  -o-user-select: none;
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+}
+
+.about {
+	vertical-align:top;
+	float:right;
+	right: 10px;
+	color:#B10000;
+	text-shadow: -1px 1px 1px #C2C2C2;
+	font-family: sans-serif;
+}
+.about a  {text-decoration:underline; color: #B10000; text-shadow: -1px 1px 1px #C2C2C2;}
+.about a:hover  {text-decoration:underline; color: yellow}
+
+.headerMarkSimGCM {
+	/*background:#FFFFFF;*/
+	height:80px;
+	width:100%;
+	margin:0px;
+	padding:0px;
+	/*padding-left:10px;*/
+	padding-right:10px;
+	text-align:center;
+	vertical-align: top;
+
+}
+
+.MarkSimGCM_header {
+	/*float: left;*/
+	background: url(../images/MarkSimGCM_header.png);
+	background-repeat: no-repeat;
+	display: inline-block;
+	height: 70px;
+	width: 141px;
+	opacity: 0.85;
+	z-index: 1;
+	/*position:absolute;
+	left:0px;*/
+}
+
+.txt_colorParams{
+	color:#B10000; /*#4163BB;*/
+	text-shadow: -1px 1px 1px #C2C2C2;
+	font-family: sans-serif;
+}
+.txt_colorParams2{
+	color:#1C48B9;
+}
+.txt_colorParams3{
+	color:#FFF;
+	text-shadow: -1px 1px 1px #C2C2C2;
+	font-family: sans-serif;
+}
+.txt_RCP{
+	color:#970600;
+}
+
+p.txt_colorParams a  {text-decoration:underline; color: #FFF}
+p.txt_colorParams a:hover  {text-decoration:underline; color: yellow}
+
+#BtnRunClimateDiagram{
+	width:125px;
+	background: #689C25;
+	color: #fff;
+}
+#BtnRun{
+	width:125px;
+	background: #0A63E7;
+	color: #fff;
+}
+#BtnSoil {
+  width: 125px;
+  background: #A60606;
+  color: #fff;
+}
+
+.tblGCMs{
+	border:1px solid #444;width:100%;color:#0065D3;
+}
+.tblGCMs td {
+	color:#0065D3;
+}
+
+.txt_frm2 {
+	/*color:#1C48B9;*/
+	padding-right:40px;
+}
+
+.btnDownloadPDF {
+    width: 200px;
+    height: 30px;
+    vertical-align: middle;
+    color: #fff !important;
+    background: green !important;
+    line-height: 27px;
+    font-size: 1.5em !important;
+}
+
+.btnViewLarger {
+    width: 200px;
+    height: 30px;
+    vertical-align: middle;
+    color: #fff !important;
+    background: blue !important;
+    line-height: 27px;
+    font-size: 1.5em !important;
+}
+
+.btnViewLarger2 {
+    width: 170px;
+    height: 30px;
+    vertical-align: middle;
+    color: #fff !important;
+    background: green !important;
+    line-height: 27px;
+    font-size: 1.0em !important;
+}
+
+.climateDiaglist {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 9pt;
+	margin:2px 2px 0px 2px; 
+	/* width:150px;*/
+	height:auto;
+	max-height:600px;
+	overflow: auto;
+	/*border: 1px solid #AAAAAA;
+	color: #222222;
+	background:#FFFFFF;
+	-moz-border-radius: 4px 4px 4px 4px;*/
+}
+.climateDiaglist a  {text-decoration:none; color: #2E9AFE}
+.climateDiaglist a:hover {text-decoration:underline; color: blue}
+
+/* Docs */
+.parrafo1{
+	font-family:sans-serif;
+	font-size:0.9em;
+	color:#444;	
+}
+#popupWin a {text-decoration:none; color:blue}
+#popupWin a:hover {text-decoration:underline; color: blue}
+
+
+#optCharts {
+	font-family: sans-serif;
+	font-size: 0.75em;
+	font-weight:bold;
+	width: 70px;
+	z-index: 2;
+	position: absolute;
+	left: 5px;
+}
+
+/* Override jquery ui dialog */
+.ui-dialog .ui-dialog-titlebar {
+	padding: 0.1em 1em .1em;
+	position: relative;
+}
+/*.ui-dialog .ui-icon {
+	display: inline-block !important;
+	text-indent: -99999px;
+	overflow: hidden;
+	background-repeat: no-repeat;
+}*/
+
+a.ui-dialog-titlebar-restore,
+a.ui-dialog-titlebar-minimize {
+  text-decoration:none;
+  float: right;
+  position: relative !important;
+  right: 20px !important;
+  top: 7px !important;
+}
+
+.dialog-restore, ui-dialog-titlebar-rest {
+	float: right;
+	position: relative !important;
+	right: 20px !important;
+	top: 7px !important;
+}
+
+.dialog-minimize, ui-dialog-titlebar-minimize {
+	display:inline-block;
+	float: right;
+	position: relative !important;
+	right: 20px !important;
+	top: 7px !important;
+}
+
+.ui-state-disabled {
+	opacity:0.5;
+	filter: Alpha(Opacity=0.5);
+}
+
+.popupClimateDiagramWin {
+	z-index:-1;
+	width:390px;
+	height:450px;
+}
+
+.submit {
+    background-image: url(../images/ZIPx64.png); /* 16px x 16px */
+    background-color: transparent; /* make the button transparent */
+    background-repeat: no-repeat;  /* make the background image appear only once */
+    background-position: 0px 0px;  /* equivalent to 'top left' */
+    border: none;           /* assuming we don't want any borders */
+    cursor: pointer;        /* make the cursor like hovering over an <a> element */
+    height: 70px;           /* make this the size of your image */
+    width:70px;
+    padding-left: 16px;     /* make text start to the right of the image */
+    vertical-align: middle; 
+}

@@ -1,0 +1,1050 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"> 
+<html> 
+<head> 
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<meta name="Author" content="Ernesto Giron" />
+	<meta name="copyright" content="&copy; 2010 - 2014 ILRI.">
+	<meta name="keywords" content="ILRI, CCAFS, CIAT, MarkSim, GCM, DSSAT, weather, generator, egiron, ArcGISServer">
+	<meta name="date" content="2010-10-31T05:55:55+00:00">
+	<title>MarkSim™ GCM - DSSAT weather file generator - Documentation</title> 
+	<link rel="stylesheet" type="text/css" href="../css/docstyles.css" />
+</head> 
+<body>
+	<div id="header">
+	<table border="0" cellpadding="0" cellspacing="0" align="center" >
+	<tr>
+		<td style="width:145px;vertical-align: top;padding-top: 10px;padding-left: 6px;background:#FFF;"><div class="MarkSimGCM_header"></div></td>
+		<td style="width:610px;"><div class="titleApp">MarkSim™ DSSAT weather file generator</div></td>
+		<td><a href="http://www.ccafs.cgiar.org/" target="_new"><div class="logoCCAFS"></div></a></td>
+	</tr>
+	</table>
+	</div>
+
+	<div id="howMSGCMwork">
+		<div class="divTitle">How does MarkSim work?</div>
+		<blockquote align="justify">
+		<p class="parrafo1">
+		General Circulation Models (GCMs) use columns of atmosphere covering about 200 by 300 km at ground level. So they do not simulate the weather on the ground at a particular place very accurately. To get back to what is expected in detail, we have to use downscaling. The mean deviation from the baseline for each atmospheric column (pixel) is re-evaluated to take into account the ground terrain and the characteristics of the expected weather.
+		</p><p class="parrafo1">
+		This is often done with statistical downscaling, which uses the output of the GCM to compute a statistical relationship with existing meteorological data from a met station. That is then used to scale the results of the GCM to that of the station. This won't work on the global scale that we've used for MarkSimGCM simply because there are not enough met stations in the world.
+		</p><p class="parrafo1">
+		There are two aspects to downscaling: one is to interpolate the results of the GCM spatially; and the other is to ensure that the results are relevant to the local climate. The spatial downscaling is the easiest part. This is usually done with a convolution algorithm — in our case it is a bicubic interpolation using the 16 points closest on a 1 degree grid.
+		</p><p class="parrafo1">
+		Wilby et al. (2009) called this 'unintelligent downscaling' and we would agree, if this were all that we were doing. Our algorithm is based on the well-tried weather simulator MarkSim.
+		</p><p class="parrafo1">
+		MarkSim is a weather generator that uses 720 classes of weather, worldwide, to calculate the coefficients of a third order Markov rainfall generator. This constitutes 'stochastic downscaling' as it fits a Markov model to the GCM output and uses it to generate weather data for the site indicated.
+		</p><p class="parrafo1">
+		The third weapon in MarkSimGCM is built into the weather typing in the clustering process. The 720 classes of world weather define each set of regression equations that MarkSim uses to determine the coefficients for the modelling process. When a climate changes, such that it no longer applies to the original class, then the whole regression structure changes. 
+		</p><p class="parrafo1">
+		This means that a changing climate will be modelled by the one most like it in the real world. The only drawback is that the system cannot model completely new climates except by extrapolation of the regression models from the nearest cluster. But then we are still to see a new climate in sufficient detail to fit the model to it and GCM results are not precise enough to do this for the future. In the meantime, we will have to wait.
+		</p><p class="parrafo1">
+		If you want to read about the application in more detail, see <a href="marksimgcm_ag_sys.pdf" target="blank">Jones & Thornton (2013)</a>. This documents the last version of the software. It is hoped that at some stage it will be updated. To see specific details that may be different follow the links on the ‘How to use MarkSimGCM’ page.
+		</p><p class="parrafoCite">
+		Jones, P. G. and Thornton, P. K. (2013) Generating downscaled weather data from a suite of climate models for agricultural modelling applications. Agric. Systems. 114  (2013) 1-5
+		</p><p class="parrafoCite">
+		Wilby R.L., Troni J., Biot Y., Tedd L., Hewitson B.C., Smith D.M. and Sutton R.T., 2009. A review of climate risk information for adaptation and development planning. Int. J. Climatol. 29, 1193-1215.
+		</p>
+		</blockquote>
+	</div>
+	<hr width="80%"/>
+	<div id="GCMs">
+		<div class="divTitle">17 GCMs available in MarkSimGCM</div>
+		<div style="width:100%;padding-left:100px;">
+<table class=MsoNormalTable border=1 cellspacing=0 cellpadding=0 width=467
+ style='width:80%;border-collapse:collapse;border:none;mso-border-alt:solid windowtext .5pt;
+ mso-yfti-tbllook:1184;mso-padding-alt:0in 5.4pt 0in 5.4pt;mso-border-insideh:
+ .5pt solid windowtext;mso-border-insidev:.5pt solid windowtext'>
+ <tr>
+  <td width=26 valign=top style='width:25.95pt;border:solid windowtext 1.0pt;
+  mso-border-alt:solid windowtext .5pt;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-top:3.0pt;margin-right:0in;margin-bottom:
+  3.0pt;margin-left:0in'><b style='mso-bidi-font-weight:normal'><span
+  style='font-size:8.0pt;mso-bidi-font-size:9.0pt;font-family:Verdana'><o:p>&nbsp;</o:p></span></b></p>
+  </td>
+  <td width=84 valign=top style='width:83.7pt;border:solid windowtext 1.0pt;
+  border-left:none;mso-border-left-alt:solid windowtext .5pt;mso-border-alt:
+  solid windowtext .5pt;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-top:3.0pt;margin-right:0in;margin-bottom:
+  3.0pt;margin-left:0in'><b style='mso-bidi-font-weight:normal'><span
+  style='font-size:8.0pt;mso-bidi-font-size:9.0pt;font-family:Verdana'>Model<o:p></o:p></span></b></p>
+  </td>
+  <td width=116 valign=top style='width:115.5pt;border:solid windowtext 1.0pt;
+  border-left:none;mso-border-left-alt:solid windowtext .5pt;mso-border-alt:
+  solid windowtext .5pt;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-top:3.0pt;margin-right:0in;margin-bottom:
+  3.0pt;margin-left:0in'><b style='mso-bidi-font-weight:normal'><span
+  style='font-size:8.0pt;mso-bidi-font-size:9.0pt;font-family:Verdana'>Institution<o:p></o:p></span></b></p>
+  </td>
+  <td width=64 valign=top style='width:63.75pt;border:solid windowtext 1.0pt;
+  border-left:none;mso-border-left-alt:solid windowtext .5pt;mso-border-alt:
+  solid windowtext .5pt;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-top:3.0pt;margin-right:0in;margin-bottom:
+  3.0pt;margin-left:0in'><b style='mso-bidi-font-weight:normal'><span
+  style='font-size:8.0pt;mso-bidi-font-size:9.0pt;font-family:Verdana'>Resolution,<o:p></o:p></span></b></p>
+  <p class=MsoNormal style='margin-top:3.0pt;margin-right:0in;margin-bottom:
+  3.0pt;margin-left:0in'><b style='mso-bidi-font-weight:normal'><span
+  style='font-size:8.0pt;mso-bidi-font-size:9.0pt;font-family:Verdana'>Lat x
+  Long ¡<o:p></o:p></span></b></p>
+  </td>
+  <td width=178 valign=top style='width:178.2pt;border:solid windowtext 1.0pt;
+  border-left:none;mso-border-left-alt:solid windowtext .5pt;mso-border-alt:
+  solid windowtext .5pt;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-top:3.0pt;margin-right:0in;margin-bottom:
+  3.0pt;margin-left:0in'><b style='mso-bidi-font-weight:normal'><span
+  style='font-size:8.0pt;mso-bidi-font-size:9.0pt;font-family:Verdana'>Reference<o:p></o:p></span></b></p>
+  </td>
+ </tr>
+ <tr>
+  <td width=26 valign=top style='width:25.95pt;border:solid windowtext 1.0pt;
+  border-top:none;mso-border-top-alt:solid windowtext .5pt;mso-border-alt:solid windowtext .5pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-top:3.0pt;margin-right:0in;margin-bottom:
+  3.0pt;margin-left:0in'><span style='font-size:8.0pt;mso-bidi-font-size:9.0pt;
+  font-family:Verdana;mso-bidi-font-family:Arial;color:black;mso-fareast-language:
+  EN-GB'>1<o:p></o:p></span></p>
+  </td>
+  <td width=84 valign=top style='width:83.7pt;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
+  mso-border-alt:solid windowtext .5pt;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-top:3.0pt;margin-right:0in;margin-bottom:
+  3.0pt;margin-left:0in'><span style='font-size:8.0pt;mso-bidi-font-size:9.0pt;
+  font-family:Verdana;mso-bidi-font-family:Arial;color:black;mso-fareast-language:
+  EN-GB'>BCC-CSM 1.1&nbsp;</span><span style='font-size:8.0pt;mso-bidi-font-size:
+  9.0pt;font-family:Verdana'><o:p></o:p></span></p>
+  </td>
+  <td width=116 valign=top style='width:115.5pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
+  mso-border-alt:solid windowtext .5pt;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-top:3.0pt;margin-right:0in;margin-bottom:
+  3.0pt;margin-left:0in'><span style='font-size:8.0pt;mso-bidi-font-size:9.0pt;
+  font-family:Verdana;mso-bidi-font-family:Arial;color:black;mso-fareast-language:
+  EN-GB'>Beijing Climate Center, China Meteorological Administration</span><span
+  style='font-size:8.0pt;mso-bidi-font-size:9.0pt;font-family:Verdana'><o:p></o:p></span></p>
+  </td>
+  <td width=64 valign=top style='width:63.75pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
+  mso-border-alt:solid windowtext .5pt;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-top:3.0pt;margin-right:0in;margin-bottom:
+  3.0pt;margin-left:0in'><span style='font-size:8.0pt;mso-bidi-font-size:9.0pt;
+  font-family:Verdana'>2.8125 x 2.8125<o:p></o:p></span></p>
+  </td>
+  <td width=178 valign=top style='width:178.2pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
+  mso-border-alt:solid windowtext .5pt;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-top:3.0pt;margin-right:0in;margin-bottom:
+  3.0pt;margin-left:0in'><span style='font-size:8.0pt;mso-bidi-font-size:9.0pt;
+  font-family:Verdana'>Wu T (2012).<span style="mso-spacerun:yes">&nbsp;
+  </span>A Mass-Flux Cumulus Parameterization Scheme for Largescale Models:
+  Description and Test with Observations. Clim. Dynam. 38, 725&#8211;744<o:p></o:p></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width=26 valign=top style='width:25.95pt;border:solid windowtext 1.0pt;
+  border-top:none;mso-border-top-alt:solid windowtext .5pt;mso-border-alt:solid windowtext .5pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-top:3.0pt;margin-right:0in;margin-bottom:
+  3.0pt;margin-left:0in'><span style='font-size:8.0pt;mso-bidi-font-size:9.0pt;
+  font-family:Verdana;mso-bidi-font-family:Arial;color:black;mso-fareast-language:
+  EN-GB'>2<o:p></o:p></span></p>
+  </td>
+  <td width=84 valign=top style='width:83.7pt;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
+  mso-border-alt:solid windowtext .5pt;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-top:3.0pt;margin-right:0in;margin-bottom:
+  3.0pt;margin-left:0in'><span style='font-size:8.0pt;mso-bidi-font-size:9.0pt;
+  font-family:Verdana;mso-bidi-font-family:Arial;color:black;mso-fareast-language:
+  EN-GB'>BCC-CSM 1.1(m)</span><span style='font-size:8.0pt;mso-bidi-font-size:
+  9.0pt;font-family:Verdana'><o:p></o:p></span></p>
+  </td>
+  <td width=116 valign=top style='width:115.5pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
+  mso-border-alt:solid windowtext .5pt;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-top:3.0pt;margin-right:0in;margin-bottom:
+  3.0pt;margin-left:0in'><span style='font-size:8.0pt;mso-bidi-font-size:9.0pt;
+  font-family:Verdana;mso-bidi-font-family:Arial;color:black;mso-fareast-language:
+  EN-GB'>Beijing Climate Center, China Meteorological Administration</span><span
+  style='font-size:8.0pt;mso-bidi-font-size:9.0pt;font-family:Verdana'><o:p></o:p></span></p>
+  </td>
+  <td width=64 valign=top style='width:63.75pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
+  mso-border-alt:solid windowtext .5pt;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-top:3.0pt;margin-right:0in;margin-bottom:
+  3.0pt;margin-left:0in'><span style='font-size:8.0pt;mso-bidi-font-size:9.0pt;
+  font-family:Verdana'>2.8125 x 2.8125<o:p></o:p></span></p>
+  </td>
+  <td width=178 valign=top style='width:178.2pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
+  mso-border-alt:solid windowtext .5pt;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-top:3.0pt;margin-right:0in;margin-bottom:
+  3.0pt;margin-left:0in'><span style='font-size:8.0pt;mso-bidi-font-size:9.0pt;
+  font-family:Verdana'>Wu T (2012).<span style="mso-spacerun:yes">&nbsp;
+  </span>A Mass-Flux Cumulus Parameterization Scheme for Largescale Models:
+  Description and Test with Observations. Clim. Dynam. 38, 725&#8211;744<o:p></o:p></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width=26 valign=top style='width:25.95pt;border:solid windowtext 1.0pt;
+  border-top:none;mso-border-top-alt:solid windowtext .5pt;mso-border-alt:solid windowtext .5pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-top:3.0pt;margin-right:0in;margin-bottom:
+  3.0pt;margin-left:0in'><span style='font-size:8.0pt;mso-bidi-font-size:9.0pt;
+  font-family:Verdana;mso-bidi-font-family:Arial;color:black;mso-fareast-language:
+  EN-GB'>3<o:p></o:p></span></p>
+  </td>
+  <td width=84 valign=top style='width:83.7pt;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
+  mso-border-alt:solid windowtext .5pt;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-top:3.0pt;margin-right:0in;margin-bottom:
+  3.0pt;margin-left:0in'><span style='font-size:8.0pt;mso-bidi-font-size:9.0pt;
+  font-family:Verdana;mso-bidi-font-family:Arial;color:black;mso-fareast-language:
+  EN-GB'>CSIRO-Mk3.6.0</span><span style='font-size:8.0pt;mso-bidi-font-size:
+  9.0pt;font-family:Verdana'><o:p></o:p></span></p>
+  </td>
+  <td width=116 valign=top style='width:115.5pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
+  mso-border-alt:solid windowtext .5pt;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-top:3.0pt;margin-right:0in;margin-bottom:
+  3.0pt;margin-left:0in'><span style='font-size:8.0pt;mso-bidi-font-size:9.0pt;
+  font-family:Verdana;mso-bidi-font-family:Arial;color:black;mso-fareast-language:
+  EN-GB'>Commonwealth Scientific and Industrial Research Organisation and the
+  Queensland Climate Change Centre of Excellence</span><span style='font-size:
+  8.0pt;mso-bidi-font-size:9.0pt;font-family:Verdana'><o:p></o:p></span></p>
+  </td>
+  <td width=64 valign=top style='width:63.75pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
+  mso-border-alt:solid windowtext .5pt;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-top:3.0pt;margin-right:0in;margin-bottom:
+  3.0pt;margin-left:0in'><span style='font-size:8.0pt;mso-bidi-font-size:9.0pt;
+  font-family:Verdana'>1.875 x 1.875<o:p></o:p></span></p>
+  </td>
+  <td width=178 valign=top style='width:178.2pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
+  mso-border-alt:solid windowtext .5pt;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-top:3.0pt;margin-right:0in;margin-bottom:
+  3.0pt;margin-left:0in'><span style='font-size:8.0pt;mso-bidi-font-size:9.0pt;
+  font-family:Verdana'>Collier MA et al. (2011) The CSIROMk3.6.0 Atmosphere-Ocean
+  GCM: participation in CMIP5 and data publication. MODSIM 2011, Perth,
+  12&#8211;16 December 2011<o:p></o:p></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width=26 valign=top style='width:25.95pt;border:solid windowtext 1.0pt;
+  border-top:none;mso-border-top-alt:solid windowtext .5pt;mso-border-alt:solid windowtext .5pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-top:3.0pt;margin-right:0in;margin-bottom:
+  3.0pt;margin-left:0in'><span style='font-size:8.0pt;mso-bidi-font-size:9.0pt;
+  font-family:Verdana;mso-bidi-font-family:Arial;color:black;mso-fareast-language:
+  EN-GB'>4<o:p></o:p></span></p>
+  </td>
+  <td width=84 valign=top style='width:83.7pt;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
+  mso-border-alt:solid windowtext .5pt;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-top:3.0pt;margin-right:0in;margin-bottom:
+  3.0pt;margin-left:0in'><span style='font-size:8.0pt;mso-bidi-font-size:9.0pt;
+  font-family:Verdana;mso-bidi-font-family:Arial;color:black;mso-fareast-language:
+  EN-GB'>FIO-ESM</span><span style='font-size:8.0pt;mso-bidi-font-size:9.0pt;
+  font-family:Verdana'><o:p></o:p></span></p>
+  </td>
+  <td width=116 valign=top style='width:115.5pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
+  mso-border-alt:solid windowtext .5pt;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-top:3.0pt;margin-right:0in;margin-bottom:
+  3.0pt;margin-left:0in'><span style='font-size:8.0pt;mso-bidi-font-size:9.0pt;
+  font-family:Verdana;mso-bidi-font-family:Arial;color:black;mso-fareast-language:
+  EN-GB'>The First Institute of Oceanography, SOA, China</span><span
+  style='font-size:8.0pt;mso-bidi-font-size:9.0pt;font-family:Verdana'><o:p></o:p></span></p>
+  </td>
+  <td width=64 valign=top style='width:63.75pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
+  mso-border-alt:solid windowtext .5pt;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-top:3.0pt;margin-right:0in;margin-bottom:
+  3.0pt;margin-left:0in'><span style='font-size:8.0pt;mso-bidi-font-size:9.0pt;
+  font-family:Verdana'>2.812 x 2.812<o:p></o:p></span></p>
+  </td>
+  <td width=178 valign=top style='width:178.2pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
+  mso-border-alt:solid windowtext .5pt;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-top:3.0pt;margin-right:0in;margin-bottom:
+  3.0pt;margin-left:0in'><span style='font-size:8.0pt;mso-bidi-font-size:9.0pt;
+  font-family:Verdana'>Song Z, Qiao F, Song Y (2012). Response of the
+  equatorial basin-wide SST to wave mixing in a climate model: An amendment to
+  tropical bias, J. Geophys. Res., 117, C00J26<o:p></o:p></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width=26 valign=top style='width:25.95pt;border:solid windowtext 1.0pt;
+  border-top:none;mso-border-top-alt:solid windowtext .5pt;mso-border-alt:solid windowtext .5pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-top:3.0pt;margin-right:0in;margin-bottom:
+  3.0pt;margin-left:0in'><span style='font-size:8.0pt;mso-bidi-font-size:9.0pt;
+  font-family:Verdana;mso-bidi-font-family:Arial;color:black;mso-fareast-language:
+  EN-GB'>5<o:p></o:p></span></p>
+  </td>
+  <td width=84 valign=top style='width:83.7pt;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
+  mso-border-alt:solid windowtext .5pt;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-top:3.0pt;margin-right:0in;margin-bottom:
+  3.0pt;margin-left:0in'><span style='font-size:8.0pt;mso-bidi-font-size:9.0pt;
+  font-family:Verdana;mso-bidi-font-family:Arial;color:black;mso-fareast-language:
+  EN-GB'>GFDL-CM3&nbsp;</span><span style='font-size:8.0pt;mso-bidi-font-size:
+  9.0pt;font-family:Verdana'><o:p></o:p></span></p>
+  </td>
+  <td width=116 valign=top style='width:115.5pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
+  mso-border-alt:solid windowtext .5pt;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-top:3.0pt;margin-right:0in;margin-bottom:
+  3.0pt;margin-left:0in'><span style='font-size:8.0pt;mso-bidi-font-size:9.0pt;
+  font-family:Verdana;mso-bidi-font-family:Arial;color:black;mso-fareast-language:
+  EN-GB'>Geophysical Fluid Dynamics Laboratory</span><span style='font-size:
+  8.0pt;mso-bidi-font-size:9.0pt;font-family:Verdana'><o:p></o:p></span></p>
+  </td>
+  <td width=64 valign=top style='width:63.75pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
+  mso-border-alt:solid windowtext .5pt;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-top:3.0pt;margin-right:0in;margin-bottom:
+  3.0pt;margin-left:0in'><span style='font-size:8.0pt;mso-bidi-font-size:9.0pt;
+  font-family:Verdana'>2.0 x 2.5<o:p></o:p></span></p>
+  </td>
+  <td width=178 valign=top style='width:178.2pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
+  mso-border-alt:solid windowtext .5pt;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-top:3.0pt;margin-right:0in;margin-bottom:
+  3.0pt;margin-left:0in'><span style='font-size:8.0pt;mso-bidi-font-size:9.0pt;
+  font-family:Verdana'>Donner LJ et al. (2011). The dynamical core, physical
+  parameterizations, and basic simulation characteristics of the atmospheric
+  component AM3 of the GFDL Global Coupled Model CM3. Journal of Climate,
+  24(13).<o:p></o:p></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width=26 valign=top style='width:25.95pt;border:solid windowtext 1.0pt;
+  border-top:none;mso-border-top-alt:solid windowtext .5pt;mso-border-alt:solid windowtext .5pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-top:3.0pt;margin-right:0in;margin-bottom:
+  3.0pt;margin-left:0in'><span style='font-size:8.0pt;mso-bidi-font-size:9.0pt;
+  font-family:Verdana;mso-bidi-font-family:Arial;color:black;mso-fareast-language:
+  EN-GB'>6<o:p></o:p></span></p>
+  </td>
+  <td width=84 valign=top style='width:83.7pt;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
+  mso-border-alt:solid windowtext .5pt;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-top:3.0pt;margin-right:0in;margin-bottom:
+  3.0pt;margin-left:0in'><span style='font-size:8.0pt;mso-bidi-font-size:9.0pt;
+  font-family:Verdana;mso-bidi-font-family:Arial;color:black;mso-fareast-language:
+  EN-GB'>GFDL-ESM2G&nbsp;</span><span style='font-size:8.0pt;mso-bidi-font-size:
+  9.0pt;font-family:Verdana'><o:p></o:p></span></p>
+  </td>
+  <td width=116 valign=top style='width:115.5pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
+  mso-border-alt:solid windowtext .5pt;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-top:3.0pt;margin-right:0in;margin-bottom:
+  3.0pt;margin-left:0in'><span style='font-size:8.0pt;mso-bidi-font-size:9.0pt;
+  font-family:Verdana;mso-bidi-font-family:Arial;color:black;mso-fareast-language:
+  EN-GB'>Geophysical Fluid Dynamics Laboratory</span><span style='font-size:
+  8.0pt;mso-bidi-font-size:9.0pt;font-family:Verdana'><o:p></o:p></span></p>
+  </td>
+  <td width=64 valign=top style='width:63.75pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
+  mso-border-alt:solid windowtext .5pt;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-top:3.0pt;margin-right:0in;margin-bottom:
+  3.0pt;margin-left:0in'><span style='font-size:8.0pt;mso-bidi-font-size:9.0pt;
+  font-family:Verdana'>2.0 x 2.5<o:p></o:p></span></p>
+  </td>
+  <td width=178 valign=top style='width:178.2pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
+  mso-border-alt:solid windowtext .5pt;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-top:3.0pt;margin-right:0in;margin-bottom:
+  3.0pt;margin-left:0in'><span style='font-size:8.0pt;mso-bidi-font-size:9.0pt;
+  font-family:Verdana'>Dunne JP et al. (2012). GFDLÕs ESM2 Global Coupled
+  Climate&#8211;Carbon Earth System Models. Part I: Physical Formulation and
+  Baseline Simulation Characteristics. J. Climate, 25, 6646&#8211;6665. <o:p></o:p></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width=26 valign=top style='width:25.95pt;border:solid windowtext 1.0pt;
+  border-top:none;mso-border-top-alt:solid windowtext .5pt;mso-border-alt:solid windowtext .5pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-top:3.0pt;margin-right:0in;margin-bottom:
+  3.0pt;margin-left:0in'><span style='font-size:8.0pt;mso-bidi-font-size:9.0pt;
+  font-family:Verdana;mso-bidi-font-family:Arial;color:black;mso-fareast-language:
+  EN-GB'>7<o:p></o:p></span></p>
+  </td>
+  <td width=84 valign=top style='width:83.7pt;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
+  mso-border-alt:solid windowtext .5pt;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-top:3.0pt;margin-right:0in;margin-bottom:
+  3.0pt;margin-left:0in'><span style='font-size:8.0pt;mso-bidi-font-size:9.0pt;
+  font-family:Verdana;mso-bidi-font-family:Arial;color:black;mso-fareast-language:
+  EN-GB'>GFDL-ESM2M</span><span style='font-size:8.0pt;mso-bidi-font-size:9.0pt;
+  font-family:Verdana'><o:p></o:p></span></p>
+  </td>
+  <td width=116 valign=top style='width:115.5pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
+  mso-border-alt:solid windowtext .5pt;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-top:3.0pt;margin-right:0in;margin-bottom:
+  3.0pt;margin-left:0in'><span style='font-size:8.0pt;mso-bidi-font-size:9.0pt;
+  font-family:Verdana;mso-bidi-font-family:Arial;color:black;mso-fareast-language:
+  EN-GB'>Geophysical Fluid Dynamics Laboratory</span><span style='font-size:
+  8.0pt;mso-bidi-font-size:9.0pt;font-family:Verdana'><o:p></o:p></span></p>
+  </td>
+  <td width=64 valign=top style='width:63.75pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
+  mso-border-alt:solid windowtext .5pt;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-top:3.0pt;margin-right:0in;margin-bottom:
+  3.0pt;margin-left:0in'><span style='font-size:8.0pt;mso-bidi-font-size:9.0pt;
+  font-family:Verdana'>2.0 x 2.5<o:p></o:p></span></p>
+  </td>
+  <td width=178 valign=top style='width:178.2pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
+  mso-border-alt:solid windowtext .5pt;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-top:3.0pt;margin-right:0in;margin-bottom:
+  3.0pt;margin-left:0in'><span style='font-size:8.0pt;mso-bidi-font-size:9.0pt;
+  font-family:Verdana'>Dunne JP et al. (2012). GFDLÕs ESM2 Global Coupled
+  Climate&#8211;Carbon Earth System Models. Part I: Physical Formulation and
+  Baseline Simulation Characteristics. J. Climate, 25, 6646&#8211;6665.<o:p></o:p></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width=26 valign=top style='width:25.95pt;border:solid windowtext 1.0pt;
+  border-top:none;mso-border-top-alt:solid windowtext .5pt;mso-border-alt:solid windowtext .5pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-top:3.0pt;margin-right:0in;margin-bottom:
+  3.0pt;margin-left:0in'><span style='font-size:8.0pt;mso-bidi-font-size:9.0pt;
+  font-family:Verdana;mso-bidi-font-family:Arial;color:black;mso-fareast-language:
+  EN-GB'>8<o:p></o:p></span></p>
+  </td>
+  <td width=84 valign=top style='width:83.7pt;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
+  mso-border-alt:solid windowtext .5pt;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-top:3.0pt;margin-right:0in;margin-bottom:
+  3.0pt;margin-left:0in'><span style='font-size:8.0pt;mso-bidi-font-size:9.0pt;
+  font-family:Verdana;mso-bidi-font-family:Arial;color:black;mso-fareast-language:
+  EN-GB'>GISS-E2-H</span><span style='font-size:8.0pt;mso-bidi-font-size:9.0pt;
+  font-family:Verdana'><o:p></o:p></span></p>
+  </td>
+  <td width=116 valign=top style='width:115.5pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
+  mso-border-alt:solid windowtext .5pt;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-top:3.0pt;margin-right:0in;margin-bottom:
+  3.0pt;margin-left:0in'><span style='font-size:8.0pt;mso-bidi-font-size:9.0pt;
+  font-family:Verdana;mso-bidi-font-family:Arial;color:black;mso-fareast-language:
+  EN-GB'>NASA Goddard Institute for Space Studies</span><span style='font-size:
+  8.0pt;mso-bidi-font-size:9.0pt;font-family:Verdana'><o:p></o:p></span></p>
+  </td>
+  <td width=64 valign=top style='width:63.75pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
+  mso-border-alt:solid windowtext .5pt;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-top:3.0pt;margin-right:0in;margin-bottom:
+  3.0pt;margin-left:0in'><span style='font-size:8.0pt;mso-bidi-font-size:9.0pt;
+  font-family:Verdana'>2.0 x 2.5<o:p></o:p></span></p>
+  </td>
+  <td width=178 valign=top style='width:178.2pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
+  mso-border-alt:solid windowtext .5pt;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-top:3.0pt;margin-right:0in;margin-bottom:
+  3.0pt;margin-left:0in'><span style='font-size:8.0pt;mso-bidi-font-size:9.0pt;
+  font-family:Verdana'>Schmidt GA et al. (2006).<span
+  style="mso-spacerun:yes">&nbsp; </span>Present day atmospheric simulations
+  using GISS ModelE: Comparison to in-situ, satellite and reanalysis data. J.
+  Climate 19, 153-192.<o:p></o:p></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width=26 valign=top style='width:25.95pt;border:solid windowtext 1.0pt;
+  border-top:none;mso-border-top-alt:solid windowtext .5pt;mso-border-alt:solid windowtext .5pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-top:3.0pt;margin-right:0in;margin-bottom:
+  3.0pt;margin-left:0in'><span style='font-size:8.0pt;mso-bidi-font-size:9.0pt;
+  font-family:Verdana;mso-bidi-font-family:Arial;color:black;mso-fareast-language:
+  EN-GB'>9<o:p></o:p></span></p>
+  </td>
+  <td width=84 valign=top style='width:83.7pt;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
+  mso-border-alt:solid windowtext .5pt;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-top:3.0pt;margin-right:0in;margin-bottom:
+  3.0pt;margin-left:0in'><span style='font-size:8.0pt;mso-bidi-font-size:9.0pt;
+  font-family:Verdana;mso-bidi-font-family:Arial;color:black;mso-fareast-language:
+  EN-GB'>GISS-E2-R</span><span style='font-size:8.0pt;mso-bidi-font-size:9.0pt;
+  font-family:Verdana'><o:p></o:p></span></p>
+  </td>
+  <td width=116 valign=top style='width:115.5pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
+  mso-border-alt:solid windowtext .5pt;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-top:3.0pt;margin-right:0in;margin-bottom:
+  3.0pt;margin-left:0in'><span style='font-size:8.0pt;mso-bidi-font-size:9.0pt;
+  font-family:Verdana;mso-bidi-font-family:Arial;color:black;mso-fareast-language:
+  EN-GB'>NASA Goddard Institute for Space Studies</span><span style='font-size:
+  8.0pt;mso-bidi-font-size:9.0pt;font-family:Verdana'><o:p></o:p></span></p>
+  </td>
+  <td width=64 valign=top style='width:63.75pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
+  mso-border-alt:solid windowtext .5pt;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-top:3.0pt;margin-right:0in;margin-bottom:
+  3.0pt;margin-left:0in'><span style='font-size:8.0pt;mso-bidi-font-size:9.0pt;
+  font-family:Verdana'>2.0 x 2.5<o:p></o:p></span></p>
+  </td>
+  <td width=178 valign=top style='width:178.2pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
+  mso-border-alt:solid windowtext .5pt;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-top:3.0pt;margin-right:0in;margin-bottom:
+  3.0pt;margin-left:0in'><span style='font-size:8.0pt;mso-bidi-font-size:9.0pt;
+  font-family:Verdana'>Schmidt GA et al. (2006).<span
+  style="mso-spacerun:yes">&nbsp; </span>Present day atmospheric simulations
+  using GISS ModelE: Comparison to in-situ, satellite and reanalysis data. J.
+  Climate 19, 153-192.<o:p></o:p></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width=26 valign=top style='width:25.95pt;border:solid windowtext 1.0pt;
+  border-top:none;mso-border-top-alt:solid windowtext .5pt;mso-border-alt:solid windowtext .5pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-top:3.0pt;margin-right:0in;margin-bottom:
+  3.0pt;margin-left:0in'><span style='font-size:8.0pt;mso-bidi-font-size:9.0pt;
+  font-family:Verdana;mso-bidi-font-family:Arial;color:black;mso-fareast-language:
+  EN-GB'>10<o:p></o:p></span></p>
+  </td>
+  <td width=84 valign=top style='width:83.7pt;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
+  mso-border-alt:solid windowtext .5pt;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-top:3.0pt;margin-right:0in;margin-bottom:
+  3.0pt;margin-left:0in'><span style='font-size:8.0pt;mso-bidi-font-size:9.0pt;
+  font-family:Verdana;mso-bidi-font-family:Arial;color:black;mso-fareast-language:
+  EN-GB'>HadGEM2-ES</span><span style='font-size:8.0pt;mso-bidi-font-size:9.0pt;
+  font-family:Verdana'><o:p></o:p></span></p>
+  </td>
+  <td width=116 valign=top style='width:115.5pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
+  mso-border-alt:solid windowtext .5pt;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-top:3.0pt;margin-right:0in;margin-bottom:
+  3.0pt;margin-left:0in'><span style='font-size:8.0pt;mso-bidi-font-size:9.0pt;
+  font-family:Verdana;mso-bidi-font-family:Arial;color:black;mso-fareast-language:
+  EN-GB'>Met Office Hadley Centre</span><span style='font-size:8.0pt;
+  mso-bidi-font-size:9.0pt;font-family:Verdana'><o:p></o:p></span></p>
+  </td>
+  <td width=64 valign=top style='width:63.75pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
+  mso-border-alt:solid windowtext .5pt;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-top:3.0pt;margin-right:0in;margin-bottom:
+  3.0pt;margin-left:0in'><span style='font-size:8.0pt;mso-bidi-font-size:9.0pt;
+  font-family:Verdana'>1.2414 x 1.875<o:p></o:p></span></p>
+  </td>
+  <td width=178 valign=top style='width:178.2pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
+  mso-border-alt:solid windowtext .5pt;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-top:3.0pt;margin-right:0in;margin-bottom:
+  3.0pt;margin-left:0in'><span style='font-size:8.0pt;mso-bidi-font-size:9.0pt;
+  font-family:Verdana'>Collins WJ et al. (2011). Development and evaluation of
+  an Earth-System model-HadGEM2. GMD 4(4):1051&#8211;1075.<o:p></o:p></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width=26 valign=top style='width:25.95pt;border:solid windowtext 1.0pt;
+  border-top:none;mso-border-top-alt:solid windowtext .5pt;mso-border-alt:solid windowtext .5pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-top:3.0pt;margin-right:0in;margin-bottom:
+  3.0pt;margin-left:0in'><span style='font-size:8.0pt;mso-bidi-font-size:9.0pt;
+  font-family:Verdana;mso-bidi-font-family:Arial;color:black;mso-fareast-language:
+  EN-GB'>11<o:p></o:p></span></p>
+  </td>
+  <td width=84 valign=top style='width:83.7pt;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
+  mso-border-alt:solid windowtext .5pt;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-top:3.0pt;margin-right:0in;margin-bottom:
+  3.0pt;margin-left:0in'><span style='font-size:8.0pt;mso-bidi-font-size:9.0pt;
+  font-family:Verdana;mso-bidi-font-family:Arial;color:black;mso-fareast-language:
+  EN-GB'>IPSL-CM5A-LR&nbsp;</span><span style='font-size:8.0pt;mso-bidi-font-size:
+  9.0pt;font-family:Verdana'><o:p></o:p></span></p>
+  </td>
+  <td width=116 valign=top style='width:115.5pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
+  mso-border-alt:solid windowtext .5pt;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-top:3.0pt;margin-right:0in;margin-bottom:
+  3.0pt;margin-left:0in'><span style='font-size:8.0pt;mso-bidi-font-size:9.0pt;
+  font-family:Verdana;mso-bidi-font-family:Arial;color:black;mso-fareast-language:
+  EN-GB'>Institut Pierre-Simon Laplace</span><span style='font-size:8.0pt;
+  mso-bidi-font-size:9.0pt;font-family:Verdana'><o:p></o:p></span></p>
+  </td>
+  <td width=64 valign=top style='width:63.75pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
+  mso-border-alt:solid windowtext .5pt;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-top:3.0pt;margin-right:0in;margin-bottom:
+  3.0pt;margin-left:0in'><span style='font-size:8.0pt;mso-bidi-font-size:9.0pt;
+  font-family:Verdana'>1.875 x 3.75<o:p></o:p></span></p>
+  </td>
+  <td width=178 valign=top style='width:178.2pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
+  mso-border-alt:solid windowtext .5pt;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-top:3.0pt;margin-right:0in;margin-bottom:
+  3.0pt;margin-left:0in'><span style='font-size:8.0pt;mso-bidi-font-size:9.0pt;
+  font-family:Verdana'>Dufresne JL et al. (2013). Climate change projections
+  using the IPSL-CM5 Earth System Model: from CMIP3 to CMIP5. Climate Dynamics,
+  1-43.<o:p></o:p></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width=26 valign=top style='width:25.95pt;border:solid windowtext 1.0pt;
+  border-top:none;mso-border-top-alt:solid windowtext .5pt;mso-border-alt:solid windowtext .5pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-top:3.0pt;margin-right:0in;margin-bottom:
+  3.0pt;margin-left:0in'><span style='font-size:8.0pt;mso-bidi-font-size:9.0pt;
+  font-family:Verdana;mso-bidi-font-family:Arial;color:black;mso-fareast-language:
+  EN-GB'>12<o:p></o:p></span></p>
+  </td>
+  <td width=84 valign=top style='width:83.7pt;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
+  mso-border-alt:solid windowtext .5pt;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-top:3.0pt;margin-right:0in;margin-bottom:
+  3.0pt;margin-left:0in'><span style='font-size:8.0pt;mso-bidi-font-size:9.0pt;
+  font-family:Verdana;mso-bidi-font-family:Arial;color:black;mso-fareast-language:
+  EN-GB'>IPSL-CM5A-MR&nbsp;</span><span style='font-size:8.0pt;mso-bidi-font-size:
+  9.0pt;font-family:Verdana'><o:p></o:p></span></p>
+  </td>
+  <td width=116 valign=top style='width:115.5pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
+  mso-border-alt:solid windowtext .5pt;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-top:3.0pt;margin-right:0in;margin-bottom:
+  3.0pt;margin-left:0in'><span style='font-size:8.0pt;mso-bidi-font-size:9.0pt;
+  font-family:Verdana;mso-bidi-font-family:Arial;color:black;mso-fareast-language:
+  EN-GB'>Institut Pierre-Simon Laplace</span><span style='font-size:8.0pt;
+  mso-bidi-font-size:9.0pt;font-family:Verdana'><o:p></o:p></span></p>
+  </td>
+  <td width=64 valign=top style='width:63.75pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
+  mso-border-alt:solid windowtext .5pt;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-top:3.0pt;margin-right:0in;margin-bottom:
+  3.0pt;margin-left:0in'><span style='font-size:8.0pt;mso-bidi-font-size:9.0pt;
+  font-family:Verdana'>1.2587 x 2.5<o:p></o:p></span></p>
+  </td>
+  <td width=178 valign=top style='width:178.2pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
+  mso-border-alt:solid windowtext .5pt;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-top:3.0pt;margin-right:0in;margin-bottom:
+  3.0pt;margin-left:0in'><span style='font-size:8.0pt;mso-bidi-font-size:9.0pt;
+  font-family:Verdana'>Dufresne JL et al. (2013). Climate change projections
+  using the IPSL-CM5 Earth System Model: from CMIP3 to CMIP5. Climate Dynamics,
+  1-43.<o:p></o:p></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width=26 valign=top style='width:25.95pt;border:solid windowtext 1.0pt;
+  border-top:none;mso-border-top-alt:solid windowtext .5pt;mso-border-alt:solid windowtext .5pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-top:3.0pt;margin-right:0in;margin-bottom:
+  3.0pt;margin-left:0in'><span style='font-size:8.0pt;mso-bidi-font-size:9.0pt;
+  font-family:Verdana;mso-bidi-font-family:Arial;color:black;mso-fareast-language:
+  EN-GB'>13<o:p></o:p></span></p>
+  </td>
+  <td width=84 valign=top style='width:83.7pt;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
+  mso-border-alt:solid windowtext .5pt;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-top:3.0pt;margin-right:0in;margin-bottom:
+  3.0pt;margin-left:0in'><span style='font-size:8.0pt;mso-bidi-font-size:9.0pt;
+  font-family:Verdana;mso-bidi-font-family:Arial;color:black;mso-fareast-language:
+  EN-GB'>MIROC-ESM&nbsp;</span><span style='font-size:8.0pt;mso-bidi-font-size:
+  9.0pt;font-family:Verdana'><o:p></o:p></span></p>
+  </td>
+  <td width=116 valign=top style='width:115.5pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
+  mso-border-alt:solid windowtext .5pt;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-top:3.0pt;margin-right:0in;margin-bottom:
+  3.0pt;margin-left:0in'><span style='font-size:8.0pt;mso-bidi-font-size:9.0pt;
+  font-family:Verdana;mso-bidi-font-family:Arial;color:black;mso-fareast-language:
+  EN-GB'>Atmosphere and Ocean Research Institute (The University of Tokyo),
+  National Institute for Environmental Studies, and Japan Agency for
+  Marine-Earth Science and Technology</span><span style='font-size:8.0pt;
+  mso-bidi-font-size:9.0pt;font-family:Verdana'><o:p></o:p></span></p>
+  </td>
+  <td width=64 valign=top style='width:63.75pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
+  mso-border-alt:solid windowtext .5pt;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-top:3.0pt;margin-right:0in;margin-bottom:
+  3.0pt;margin-left:0in'><span style='font-size:8.0pt;mso-bidi-font-size:9.0pt;
+  font-family:Verdana'>2.8125 x 2.8125<o:p></o:p></span></p>
+  </td>
+  <td width=178 valign=top style='width:178.2pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
+  mso-border-alt:solid windowtext .5pt;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-top:3.0pt;margin-right:0in;margin-bottom:
+  3.0pt;margin-left:0in'><span style='font-size:8.0pt;mso-bidi-font-size:9.0pt;
+  font-family:Verdana'>Watanabe S et al. (2011). MIROC-ESM2010: model
+  description and basic results of CMIP5-20c3m experiments. Geoscientific Model
+  Development 4 (4), 845&#8211;872.<o:p></o:p></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width=26 valign=top style='width:25.95pt;border:solid windowtext 1.0pt;
+  border-top:none;mso-border-top-alt:solid windowtext .5pt;mso-border-alt:solid windowtext .5pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-top:3.0pt;margin-right:0in;margin-bottom:
+  3.0pt;margin-left:0in'><span style='font-size:8.0pt;mso-bidi-font-size:9.0pt;
+  font-family:Verdana;mso-bidi-font-family:Arial;color:black;mso-fareast-language:
+  EN-GB'>14<o:p></o:p></span></p>
+  </td>
+  <td width=84 valign=top style='width:83.7pt;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
+  mso-border-alt:solid windowtext .5pt;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-top:3.0pt;margin-right:0in;margin-bottom:
+  3.0pt;margin-left:0in'><span style='font-size:8.0pt;mso-bidi-font-size:9.0pt;
+  font-family:Verdana;mso-bidi-font-family:Arial;color:black;mso-fareast-language:
+  EN-GB'>MIROC-ESM-CHEM</span><span style='font-size:8.0pt;mso-bidi-font-size:
+  9.0pt;font-family:Verdana'><o:p></o:p></span></p>
+  </td>
+  <td width=116 valign=top style='width:115.5pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
+  mso-border-alt:solid windowtext .5pt;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-top:3.0pt;margin-right:0in;margin-bottom:
+  3.0pt;margin-left:0in'><span style='font-size:8.0pt;mso-bidi-font-size:9.0pt;
+  font-family:Verdana;mso-bidi-font-family:Arial;color:black;mso-fareast-language:
+  EN-GB'>Atmosphere and Ocean Research Institute (The University of Tokyo),
+  National Institute for Environmental Studies, and Japan Agency for
+  Marine-Earth Science and Technology</span><span style='font-size:8.0pt;
+  mso-bidi-font-size:9.0pt;font-family:Verdana'><o:p></o:p></span></p>
+  </td>
+  <td width=64 valign=top style='width:63.75pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
+  mso-border-alt:solid windowtext .5pt;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-top:3.0pt;margin-right:0in;margin-bottom:
+  3.0pt;margin-left:0in'><span style='font-size:8.0pt;mso-bidi-font-size:9.0pt;
+  font-family:Verdana'>2.8125 x 2.8125<o:p></o:p></span></p>
+  </td>
+  <td width=178 valign=top style='width:178.2pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
+  mso-border-alt:solid windowtext .5pt;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-top:3.0pt;margin-right:0in;margin-bottom:
+  3.0pt;margin-left:0in'><span style='font-size:8.0pt;mso-bidi-font-size:9.0pt;
+  font-family:Verdana'>Watanabe S et al. (2011). MIROC-ESM2010: model
+  description and basic results of CMIP5-20c3m experiments. Geoscientific Model
+  Development 4 (4), 845&#8211;872.<o:p></o:p></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width=26 valign=top style='width:25.95pt;border:solid windowtext 1.0pt;
+  border-top:none;mso-border-top-alt:solid windowtext .5pt;mso-border-alt:solid windowtext .5pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-top:3.0pt;margin-right:0in;margin-bottom:
+  3.0pt;margin-left:0in'><span style='font-size:8.0pt;mso-bidi-font-size:9.0pt;
+  font-family:Verdana;mso-bidi-font-family:Arial;color:black;mso-fareast-language:
+  EN-GB'>15<o:p></o:p></span></p>
+  </td>
+  <td width=84 valign=top style='width:83.7pt;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
+  mso-border-alt:solid windowtext .5pt;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-top:3.0pt;margin-right:0in;margin-bottom:
+  3.0pt;margin-left:0in'><span style='font-size:8.0pt;mso-bidi-font-size:9.0pt;
+  font-family:Verdana;mso-bidi-font-family:Arial;color:black;mso-fareast-language:
+  EN-GB'>MIROC5&nbsp;</span><span style='font-size:8.0pt;mso-bidi-font-size:
+  9.0pt;font-family:Verdana'><o:p></o:p></span></p>
+  </td>
+  <td width=116 valign=top style='width:115.5pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
+  mso-border-alt:solid windowtext .5pt;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-top:3.0pt;margin-right:0in;margin-bottom:
+  3.0pt;margin-left:0in'><span style='font-size:8.0pt;mso-bidi-font-size:9.0pt;
+  font-family:Verdana;mso-bidi-font-family:Arial;color:black;mso-fareast-language:
+  EN-GB'>Japan Agency for Marine-Earth Science and Technology, Atmosphere and
+  Ocean Research Institute (The University of Tokyo), and National Institute
+  for Environmental Studies</span><span style='font-size:8.0pt;mso-bidi-font-size:
+  9.0pt;font-family:Verdana'><o:p></o:p></span></p>
+  </td>
+  <td width=64 valign=top style='width:63.75pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
+  mso-border-alt:solid windowtext .5pt;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-top:3.0pt;margin-right:0in;margin-bottom:
+  3.0pt;margin-left:0in'><span style='font-size:8.0pt;mso-bidi-font-size:9.0pt;
+  font-family:Verdana'>1.4063 x 1.4063<o:p></o:p></span></p>
+  </td>
+  <td width=178 valign=top style='width:178.2pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
+  mso-border-alt:solid windowtext .5pt;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-top:3.0pt;margin-right:0in;margin-bottom:
+  3.0pt;margin-left:0in'><span style='font-size:8.0pt;mso-bidi-font-size:9.0pt;
+  font-family:Verdana'>Watanabe M et al. (2010). Improved Climate Simulation by
+  MIROC5: Mean States, Variability, and Climate Sensitivity. J. Climate, 23,
+  6312&#8211;6335. <o:p></o:p></span></p>
+  <p class=MsoNormal style='margin-top:3.0pt;margin-right:0in;margin-bottom:
+  3.0pt;margin-left:0in'><span style='font-size:8.0pt;mso-bidi-font-size:9.0pt;
+  font-family:Verdana'><o:p>&nbsp;</o:p></span></p>
+  <p class=MsoNormal style='margin-top:3.0pt;margin-right:0in;margin-bottom:
+  3.0pt;margin-left:0in'><span style='font-size:8.0pt;mso-bidi-font-size:9.0pt;
+  font-family:Verdana'><o:p>&nbsp;</o:p></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width=26 valign=top style='width:25.95pt;border:solid windowtext 1.0pt;
+  border-top:none;mso-border-top-alt:solid windowtext .5pt;mso-border-alt:solid windowtext .5pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-top:3.0pt;margin-right:0in;margin-bottom:
+  3.0pt;margin-left:0in'><span style='font-size:8.0pt;mso-bidi-font-size:9.0pt;
+  font-family:Verdana;mso-bidi-font-family:Arial;color:black;mso-fareast-language:
+  EN-GB'>16<o:p></o:p></span></p>
+  </td>
+  <td width=84 valign=top style='width:83.7pt;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
+  mso-border-alt:solid windowtext .5pt;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-top:3.0pt;margin-right:0in;margin-bottom:
+  3.0pt;margin-left:0in'><span style='font-size:8.0pt;mso-bidi-font-size:9.0pt;
+  font-family:Verdana;mso-bidi-font-family:Arial;color:black;mso-fareast-language:
+  EN-GB'>MRI-CGCM3<o:p></o:p></span></p>
+  </td>
+  <td width=116 valign=top style='width:115.5pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
+  mso-border-alt:solid windowtext .5pt;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-top:3.0pt;margin-right:0in;margin-bottom:
+  3.0pt;margin-left:0in'><span style='font-size:8.0pt;mso-bidi-font-size:9.0pt;
+  font-family:Verdana;mso-bidi-font-family:Arial;color:black;mso-fareast-language:
+  EN-GB'>Meteorological Research Institute</span><span style='font-size:8.0pt;
+  mso-bidi-font-size:9.0pt;font-family:Verdana'><o:p></o:p></span></p>
+  </td>
+  <td width=64 valign=top style='width:63.75pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
+  mso-border-alt:solid windowtext .5pt;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-top:3.0pt;margin-right:0in;margin-bottom:
+  3.0pt;margin-left:0in'><span style='font-size:8.0pt;mso-bidi-font-size:9.0pt;
+  font-family:Verdana'>1.125 x 1.125<o:p></o:p></span></p>
+  </td>
+  <td width=178 valign=top style='width:178.2pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
+  mso-border-alt:solid windowtext .5pt;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-top:3.0pt;margin-right:0in;margin-bottom:
+  3.0pt;margin-left:0in'><span style='font-size:8.0pt;mso-bidi-font-size:9.0pt;
+  font-family:Verdana'>Yukimoto S (2012).<span style="mso-spacerun:yes">&nbsp;
+  </span>A new global climate model of Meteorological Research Institute:
+  MRI-CGCM3 &#8211; Model description and basic performance. J. Meteorol. Soc.
+  Jpn., 90a, 23&#8211;64<o:p></o:p></span></p>
+  </td>
+ </tr>
+ <tr style='mso-yfti-lastrow:yes'>
+  <td width=26 valign=top style='width:25.95pt;border:solid windowtext 1.0pt;
+  border-top:none;mso-border-top-alt:solid windowtext .5pt;mso-border-alt:solid windowtext .5pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-top:3.0pt;margin-right:0in;margin-bottom:
+  3.0pt;margin-left:0in'><span style='font-size:8.0pt;mso-bidi-font-size:9.0pt;
+  font-family:Verdana;mso-bidi-font-family:Arial;color:black;mso-fareast-language:
+  EN-GB'>17<o:p></o:p></span></p>
+  </td>
+  <td width=84 valign=top style='width:83.7pt;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
+  mso-border-alt:solid windowtext .5pt;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-top:3.0pt;margin-right:0in;margin-bottom:
+  3.0pt;margin-left:0in'><span style='font-size:8.0pt;mso-bidi-font-size:9.0pt;
+  font-family:Verdana;mso-bidi-font-family:Arial;color:black;mso-fareast-language:
+  EN-GB'>NorESM1-M&nbsp;<o:p></o:p></span></p>
+  </td>
+  <td width=116 valign=top style='width:115.5pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
+  mso-border-alt:solid windowtext .5pt;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-top:3.0pt;margin-right:0in;margin-bottom:
+  3.0pt;margin-left:0in'><span style='font-size:8.0pt;mso-bidi-font-size:9.0pt;
+  font-family:Verdana;mso-bidi-font-family:Arial;color:black;mso-fareast-language:
+  EN-GB'>Norwegian Climate Centre</span><span style='font-size:8.0pt;
+  mso-bidi-font-size:9.0pt;font-family:Verdana'><o:p></o:p></span></p>
+  </td>
+  <td width=64 valign=top style='width:63.75pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
+  mso-border-alt:solid windowtext .5pt;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-top:3.0pt;margin-right:0in;margin-bottom:
+  3.0pt;margin-left:0in'><span style='font-size:8.0pt;mso-bidi-font-size:9.0pt;
+  font-family:Verdana'>1.875 x 2.5<o:p></o:p></span></p>
+  </td>
+  <td width=178 valign=top style='width:178.2pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
+  mso-border-alt:solid windowtext .5pt;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-top:3.0pt;margin-right:0in;margin-bottom:
+  3.0pt;margin-left:0in'><span style='font-size:8.0pt;mso-bidi-font-size:9.0pt;
+  font-family:Verdana'>Kirkevag A, Iversen T, Seland O, Debernard JB, Storelvmo
+  T, Kristjansson JE (2008) Aerosol-cloud-climate interactions in the climate
+  model CAM-Oslo.Tellus A 60(3):492&#8211;512.<o:p></o:p></span></p>
+  <p class=MsoNormal style='margin-top:3.0pt;margin-right:0in;margin-bottom:
+  3.0pt;margin-left:0in'><span style='font-size:8.0pt;mso-bidi-font-size:9.0pt;
+  font-family:Verdana'>Seland O, Iversen T, Kirkevag A, Storelvmo T (2008).
+  Aerosol-climate interactions in the CAM-Oslo atmospheric GCM and
+  investigation of associated basic shortcomings. Tellus A 60(3):459&#8211;491.<o:p></o:p></span></p>
+  </td>
+ </tr>
+</table>
+</div>
+	</div>
+	<hr width="80%"/>
+
+	<div id="RCPs">
+	<div class="divTitle">Representative Concentration Pathways (RCP)</div>
+	<blockquote align="justify">
+	<p class="parrafo1">
+	These are the standardised set of future greenhouse gas emissions used by the General Circulation Models for the IPCC 5th approximation (CMIP5)
+	</p>
+	<div style="text-align:center;"><img src="RCP.png">
+	<i><a href="http://en.wikipedia.org/wiki/Representative_Concentration_Pathways" target="blank">http://en.wikipedia.org/wiki/Representative_Concentration_Pathways</a></i>
+	</div>
+	<p class="parrafo1">
+	They integrate various future scenarios for CO2, Methane, Nitrous oxide, Fluorinated hydrcarbons and Ozone. Models were used to calculate the CO2  equivalent of the concentrations of these gasses under different future emission scenarios, taking into account their individual forcing values and lifetimes in the atmosphere. 
+	</p>
+
+	</div>
+	<hr width="80%"/>
+	<div id="StatsAvg">
+		<div class="divTitle">Statistical average</div>
+		<blockquote align="justify">
+		<p class="parrafo1">
+		A common way to represent the deviation from the baseline created by a GCM is to take a time slice off GCM data, often 10 years before and 10 years after the desired year. However this limits the number of years that can be represented as you’ve used 20 years to estimate one year. It would be possible to use a running mean of the 20 years, but this still limits to 10 years after the start of the data and 10 years before the end of the data. It also results in exceedingly large datasets.
+		</p><p class="parrafo1">
+		We have found that in almost all cases, for all models, RCPs and pixels, fitting a fourth order regression through the deviations from baseline yields an error mean square indistinguishable from the historic baseline variance. The regressions are fitted through the origin at a notional point midway through the historic baseline data. This constrains the early years.
+		</p><p class="parrafo1">
+		The result is an estimated deviation for any given year with an error term that uses all of the available data and so is actually better than a running mean.  If the world is represented in 1 degree pixels, all the models and RCPs can be contained in a dataset that is only 2Gb which manageable for MarkSimGCM.  
+		</p><p class="parrafo1">
+		To interpolate the deviation to the exact point that you have selected we use a bicubic convolution algorithm. This fits a two dimensional cubic interpolation to the adjacent 16 points on the grid. This is not Thin Plate Smoothing (Laplacian splines) as the derivative is not conserved when the interpolation window shifts, but it is a continuous function and there are no steps in the surface. It is considerably faster than thin plate smoothing. 
+		</p>
+		</blockquote>
+	</div>
+	<hr width="80%"/>
+
+	<div id="CLX">
+	<div class="divTitle">MarkSim CLX file</div>
+	<blockquote align="justify">
+	<p class="parrafo1">
+	At present MarkSim uses an internal structure called CLX to hold the derived parameters for a model run. This structure also keeps track of the base climate data and the rotation of the record. In the original CD version of MarkSim a version of this was produced as an interim file. It is proposed to incorporate a version of the CLX interpretation code directly into DSSAT and so we must go back to the production of an actual CLX file. This section briefly describes the format of a CLX file.
+	</p>
+<p class="parrafo1">Example file:</p>
+<code>
+*  GCMs included in ensemble<br/>
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CSIRO-Mk3.6.0 <br/>
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;HadGEM2-ES    <br/>
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IPSL-CM5A-LR  <br/>
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IPSL-CM5A-MR  <br/>
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MIROC5<br/>
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NorESM1-M     <br/>
+*  Year  2090<br/>
+*  Representative Concentration Pathway  rcp8.5<br/>
+   CLXname&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Lat&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Long&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Elev<br/>
+   Y_Waen&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;52.733&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-3.950&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;95<br/>
+ Correlation Matrix, ordered by phase angle<br/>
+  7&nbsp;&nbsp;&nbsp;&nbsp;1.000<br/>
+  8&nbsp;&nbsp;&nbsp;&nbsp;0.247&nbsp;&nbsp;&nbsp;&nbsp;1.000<br/>
+  9&nbsp;&nbsp;&nbsp;&nbsp;0.133&nbsp;&nbsp;&nbsp;&nbsp;0.115&nbsp;&nbsp;&nbsp;&nbsp;1.000<br/>
+ 10&nbsp;&nbsp;&nbsp;0.010&nbsp;&nbsp;&nbsp;&nbsp;0.090&nbsp;&nbsp;&nbsp;&nbsp;0.078&nbsp;&nbsp;&nbsp;&nbsp;1.000<br/>
+ 11&nbsp;&nbsp;&nbsp;0.057&nbsp;&nbsp;&nbsp;&nbsp;0.100&nbsp;&nbsp;&nbsp;&nbsp;0.092&nbsp;&nbsp;&nbsp;&nbsp;0.010&nbsp;&nbsp;&nbsp;&nbsp;1.000<br/>
+ 12&nbsp;&nbsp;&nbsp;0.025&nbsp;&nbsp;&nbsp;-0.144&nbsp;&nbsp;&nbsp;-0.022&nbsp;&nbsp;&nbsp;&nbsp;0.038&nbsp;&nbsp;&nbsp;&nbsp;0.048&nbsp;&nbsp;&nbsp;&nbsp;1.000<br/>
+ 1&nbsp;&nbsp;&nbsp;&nbsp;0.044&nbsp;&nbsp;&nbsp;-0.059&nbsp;&nbsp;&nbsp;-0.012&nbsp;&nbsp;&nbsp;&nbsp;0.050&nbsp;&nbsp;&nbsp;&nbsp;0.030&nbsp;&nbsp;&nbsp;&nbsp;0.072&nbsp;&nbsp;&nbsp;&nbsp;1.000<br/>
+ 2&nbsp;&nbsp;&nbsp;&nbsp;0.076&nbsp;&nbsp;&nbsp;&nbsp;0.024&nbsp;&nbsp;&nbsp;&nbsp;0.114&nbsp;&nbsp;&nbsp;&nbsp;0.086&nbsp;&nbsp;&nbsp;&nbsp;0.083&nbsp;&nbsp;&nbsp;-0.124&nbsp;&nbsp;&nbsp;&nbsp;0.120&nbsp;&nbsp;&nbsp;&nbsp;1.000<br/>
+  3&nbsp;&nbsp;&nbsp;&nbsp;0.154&nbsp;&nbsp;&nbsp;&nbsp;0.027&nbsp;&nbsp;&nbsp;-0.012&nbsp;&nbsp;&nbsp;&nbsp;0.058&nbsp;&nbsp;&nbsp;&nbsp;0.070&nbsp;&nbsp;&nbsp;&nbsp;0.095&nbsp;&nbsp;&nbsp;&nbsp;0.081&nbsp;&nbsp;&nbsp;&nbsp;0.127&nbsp;&nbsp;&nbsp;&nbsp;1.000<br/>
+  4&nbsp;&nbsp;&nbsp;&nbsp;0.021&nbsp;&nbsp;&nbsp;&nbsp;0.010&nbsp;&nbsp;&nbsp;&nbsp;0.070&nbsp;&nbsp;&nbsp;&nbsp;0.001&nbsp;&nbsp;&nbsp;&nbsp;0.115&nbsp;&nbsp;&nbsp;&nbsp;0.113&nbsp;&nbsp;&nbsp;&nbsp;0.106&nbsp;&nbsp;&nbsp;&nbsp;0.073&nbsp;&nbsp;&nbsp;&nbsp;0.185&nbsp;&nbsp;&nbsp;&nbsp;1.000<br/>
+  5&nbsp;&nbsp;&nbsp;&nbsp;0.047&nbsp;&nbsp;&nbsp;-0.098&nbsp;&nbsp;&nbsp;-0.052&nbsp;&nbsp;&nbsp;-0.115&nbsp;&nbsp;&nbsp;&nbsp;0.064&nbsp;&nbsp;&nbsp;-0.033&nbsp;&nbsp;&nbsp;&nbsp;0.071&nbsp;&nbsp;&nbsp;-0.013&nbsp;&nbsp;&nbsp;&nbsp;0.054&nbsp;&nbsp;&nbsp;&nbsp;0.217&nbsp;&nbsp;&nbsp;&nbsp;1.000<br/>
+  6&nbsp;&nbsp;&nbsp;&nbsp;0.143&nbsp;&nbsp;&nbsp;&nbsp;0.028&nbsp;&nbsp;&nbsp;&nbsp;0.082&nbsp;&nbsp;&nbsp;-0.022&nbsp;&nbsp;&nbsp;&nbsp;0.108&nbsp;&nbsp;&nbsp;&nbsp;0.033&nbsp;&nbsp;&nbsp;&nbsp;0.106&nbsp;&nbsp;&nbsp;&nbsp;0.036&nbsp;&nbsp;&nbsp;&nbsp;0.012&nbsp;&nbsp;&nbsp;&nbsp;0.131&nbsp;&nbsp;&nbsp;&nbsp;0.047&nbsp;&nbsp;&nbsp;&nbsp;1.000<br/>
+   Month  Av&nbsp;&nbsp;&nbsp;&nbsp;P&nbsp;&nbsp;&nbsp;&nbsp;Beta  Raindays    S.E. <br/>
+     7&nbsp;&nbsp;&nbsp;&nbsp;7.2   0.444 -0.964  0.321   0.25085<br/>
+     8&nbsp;&nbsp;&nbsp;&nbsp;8.4   0.464 -0.887  0.371   0.24530<br/>
+     9&nbsp;&nbsp;&nbsp;&nbsp;7.5   0.497 -0.768  0.452   0.23999<br/>
+    10&nbsp;&nbsp;&nbsp;7.9   0.578 -0.572  0.590   0.23843<br/>
+    11&nbsp;&nbsp;10.7   0.628 -0.745  0.468   0.24210<br/>
+    12&nbsp;&nbsp;10.6   0.632 -0.727  0.481   0.24477<br/>
+     1&nbsp;&nbsp;&nbsp;&nbsp;8.5   0.538 -0.836  0.405   0.24887<br/>
+     2&nbsp;&nbsp;&nbsp;&nbsp;6.0   0.520 -0.653  0.534   0.24696<br/>
+     3&nbsp;&nbsp;&nbsp;&nbsp;6.3   0.505 -0.698  0.502   0.24339<br/>
+     4&nbsp;&nbsp;&nbsp;&nbsp;5.4   0.458 -0.886  0.371   0.24714<br/>
+     5&nbsp;&nbsp;&nbsp;&nbsp;6.1   0.450 -0.921  0.348   0.24637<br/>
+     6&nbsp;&nbsp;&nbsp;&nbsp;6.0   0.435 -1.010  0.293   0.25378<br/>
+  Lag parameters, rainfall 1.0148 0.3136 0.0728<br/>
+  Stations in Cluster&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;21<br/>
+  Cluster number&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;423<br/>
+  Distance to cluster centre&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1.7107<br/>
+  Phase angle of rotation&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3.4280<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Jan&nbsp;&nbsp;&nbsp;&nbsp;Feb&nbsp;&nbsp;&nbsp;&nbsp;Mar&nbsp;&nbsp;&nbsp;&nbsp;Apr&nbsp;&nbsp;&nbsp;&nbsp;May&nbsp;&nbsp;&nbsp;&nbsp;Jun&nbsp;&nbsp;&nbsp;&nbsp;Jul&nbsp;&nbsp;&nbsp;&nbsp;Aug&nbsp;&nbsp;&nbsp;&nbsp;Sep&nbsp;&nbsp;&nbsp;&nbsp;Oct&nbsp;&nbsp;&nbsp;&nbsp;Nov&nbsp;&nbsp;&nbsp;&nbsp;Dec&nbsp;&nbsp;<br/>
+rainfall&nbsp;&nbsp;&nbsp;132.8&nbsp;&nbsp;&nbsp;93.8&nbsp;&nbsp;104.3&nbsp;&nbsp;&nbsp;77.8&nbsp;&nbsp;&nbsp;61.2&nbsp;&nbsp;&nbsp;60.0&nbsp;&nbsp;&nbsp;57.4&nbsp;&nbsp;&nbsp;81.9&nbsp;&nbsp;&nbsp;90.6&nbsp;&nbsp;122.0&nbsp;&nbsp;147.1&nbsp;&nbsp;157.9<br/>
+
+Max Temp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;9.5&nbsp;&nbsp;&nbsp;&nbsp;9.9&nbsp;&nbsp;&nbsp;11.8&nbsp;&nbsp;&nbsp;14.6&nbsp; &nbsp;18.6&nbsp;&nbsp;&nbsp;22.1&nbsp;&nbsp; 24.7&nbsp;&nbsp;&nbsp;24.4&nbsp;&nbsp;&nbsp;22.0&nbsp;&nbsp;&nbsp;17.7&nbsp;&nbsp;&nbsp;13.1&nbsp;&nbsp;&nbsp;10.7<br/>
+
+Min Temp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;5.4&nbsp;&nbsp;&nbsp;&nbsp;5.3&nbsp;&nbsp;&nbsp;6.4&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;8.0&nbsp;&nbsp;&nbsp;11.1&nbsp;&nbsp;&nbsp;14.3&nbsp;&nbsp; 17.1&nbsp;&nbsp;&nbsp;17.3&nbsp;&nbsp;&nbsp;15.2&nbsp;&nbsp;&nbsp;11.6&nbsp;&nbsp;&nbsp;&nbsp;8.0&nbsp;&nbsp;&nbsp;&nbsp;6.7<br/>
+
+Radiation&nbsp;&nbsp;&nbsp;&nbsp;1.0&nbsp;&nbsp;&nbsp;&nbsp;1.8&nbsp;&nbsp;&nbsp;3.7&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;5.9&nbsp;&nbsp;&nbsp;&nbsp;9.7&nbsp;&nbsp;&nbsp;12.8&nbsp;&nbsp;&nbsp;15.5&nbsp;&nbsp;&nbsp;15.1&nbsp;&nbsp;&nbsp;11.3&nbsp;&nbsp;&nbsp;&nbsp;6.5&nbsp;&nbsp;&nbsp;&nbsp;2.1&nbsp;&nbsp;&nbsp;&nbsp;1.2<br/>
+
+<br/>
+</code>
+
+<div style="width:100%;text-align:center;color:#ff0000;">
+IT IS NOT ADVISABLE TO CHANGE ANY FIELD IN A CLX FILE AS MANY ARE INTERRELATED AND CHANGES COULD HAVE UNFORESEEN EFFECTS 
+</div><p class="parrafo1">
+The records preceded by an asterisk are descriptive of the origin of the data. There will be a variable number of these depending on the selection. I.E, present day climate, one GCM, a selection of GCMs, or all 17 GCMs in an ensemble.&nbsp;&nbsp;&nbsp;&nbsp;All other records are mandatory and fixed format.
+</p><p class="parrafo1">
+The correlation matrix is shown rotated to the nearest month and only the lower triangle is printed. The markov rainfall monthly parameters are shown in the columns that follow. The values are the precise rotated values; the month indicated is the nearest and shown as a guide.
+</p><p class="parrafo1">
+The lag parameters are the probit values added to Beta for rain falling on days –1, -2 and –3. The number of stations in the cluster refers to the original calibration stations that went into the assigned cluster to form the parameter regression models. The cluster distance shows the distance from the centre of the assigned cluster in standardized 36-dimensional space. The rotation angle is in radians, it is the angle subtracted from the first phase angle of the record to normalise it in the meteorological year. This allows for comparison of station records from different parts of the globe.
+</p><p class="parrafo1">
+The monthly climate data in the last four records of the file are re-rotated to true monthly values.
+</p>
+
+	</blockquote>
+	</div>
+	<hr/>
+
+
+<p align="center">ILRI &copy; 2010 - 2014. <a href="http://ccafs.cgiar.org/marksimgcm" target="_new">Terms of Use.</a> Developed by <a href="http://ernestogiron.blogspot.com" target="_new">egiron</a></p> 
+
+</body> 
+</html>
