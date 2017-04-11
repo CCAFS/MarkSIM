@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+  </head>
+
+  <body>
+    <div class="container">
+      <br />
+      <h2 class="text-center">FAQ for MarkSim</h2>
+      <h4 class="text-center">P.G. Jones</h4>
+      <h4 class="text-center">Waen Associates Ltd.</h4>
+      <br />
+      <p>
+        <strong>Q1: When I do a correlation with MarkSim output against observed temperature it comes out well. When I correlate rainfalls it doesn’t work. What is wrong?</strong>
+      </p>
+      <p>
+        If you do enough replications, the mean rainfall will equate to the historical rainfall from WorldClim. This may be different to the observed data if you’re using observed data from a different source (i.e. a met station). Doing correlations of rainfall is very difficult and has to be done carefully. Rainfall is a two-part model. One part determines whether it rains on a given day; the second part determines how much rain falls on that day. This closely matches what happens – the weather system must be in place to create a rain day and the daily amount is largely set by local conditions and the state of air masses on that day.
+      </p>
+      <p>
+        If you’re trying to correlate daily, you will have problems because there will be no rain on most days in a dry environment. If the predicted day’s rain falls on a different day to that observed, the correlation will be zero, even if the observed and predicted are off by only one day. The amount of rainfall is largely due to chance, but this amount is not distributed normally – a requirement for a valid correlation. It is found to be a highly-skewed gamma distribution, so even if the rain days line up, the (Pearson) correlation would be invalid.
+      </p>
+      <p>
+        The best way to check rainfall is to calculate the monthly means and variances; these are closer to normal distributions than daily data are. If these both match, then the simulation is working. If you want to do a correlation, then you’ll get a more representative result if you correlate the monthly rainfall sums. However, the best test is still to compare the means and variances.
+      </p>
+      <p>
+        If you’d like to see how MarkSim converges on the observed data, do a few runs with a different number of replications, such as 10, 20 and 30. Calculate the means, variances and standard deviations. See how the means gradually come to equal the observed and how the standard errors gradually diminish. If you were to do 100 replications you’d find that the means of observed and simulated data would be essentially equal and that the standard errors would almost disappear.
+      </p>
+      <p>
+        <strong>Q2: How many replications do I have to use?</strong>
+      </p>
+      <p>
+        The ‘year’ in MarkSim is the target year for the simulation. What you get when you ask for ‘replicates’ is exactly what it says. They are replicate years of the target year with the correct annual variance that you would experience if you were conducting an experiment in that year, except you would not be able to measure it in physical terms unless you had done the experiment in multiple years.
+      </p>
+      <p>
+        Use, say, 30 replicates of 2050 to run your crop model. Calculate the yield and variance from those results. Your standard error for your results will depend on the number of simulations that you have done, and you can choose this at will; therefore, you can set the standard error to anything you like. This doesn’t happen.
+      </p>
+      <p>
+        MarkSimGCM is restricted to 99 years, but in its original form, it could go to infinity. The standard error would then be zero! When you’re writing up your results do you want to lie to your readers about the statistical significance of your results?
+      </p>
+      <p>
+        Present them with two scenarios:
+      </p>
+      <ol>
+        <li>
+          a 5-year trial in the year 2050 with standard errors to match i.e. this is what an agricultural experimenter would expect to see in 2050.
+        </li>
+        <br />
+        <li>
+          a precise estimate of what should be the result using many replicates that could not be achieved in practice. In this case, your standard errors do not mean anything because you can set them to what you want, depending on the number of replicates you request.
+        </li>
+      </ol>
+      <p>
+        Both cases are valid; in one you present the variability, in the other you present the average expected. Essentially you must look at the variance, not the standard error.
+      </p>
+      <p>
+        <strong>Q3: Can I simulate a series from 2020 to 2040 in MarkSim?</strong>
+      </p>
+      <p>
+        You can, but it is tedious and unnecessary. You would have to specify a different run with one replicate for each year. The concept of a run of simulation dates comes from analysing GCM results, or even agronomic trials, where replications of a year are not possible. Thus the 2030 estimate of the 20-year average from a CGM will be the run of 2020 to 2040. The true analysis of this can be quite complicated as it involves fitting a time series regression to estimate the mean and variance.
+      </p>
+      <p>
+        MarkSim can give you 20 replications of the year 2030 by starting from a different random number for each run. In fact, it always does this unless you specify a random number to start with. You will get 20 replicate year sets of WTG files for use in DSSAT. To make things confusing, these will be numbered as if they are sequential years so that DSSAT will take them all as if it is a 20-year run. However, they are true uncorrelated replicates of the year 2030 and you don't need to de-trend the results or allow for autocorrelation.
+      </p>
+      <p>
+        <strong>Q4: Why cannot MarkSim generate weather data before 2010?</strong>
+      </p>
+      <p>
+        The current version of MarkSim sets 1985 as the ‘present day climate’. The General Circulation Models (GCMs) it is derived from are usually run for about 50 or 100 years of past data to determine a baseline. The GCM differential is modelled pixel by pixel with a fifth-order polynomial regression. There is a data gap from 1985 to 2010 and the curves might not be stable in this region, so we decided it was best not to allow the user to specify years in this range. In practice, there is usually such an insignificant effect in this region that it would not be worth including it.
+      </p>
+      <p>
+        <strong>Q5: How can I be sure that the soils data given by MarkSimGCM is representative of my country when there are no WISE soil profiles from here?</strong>
+      </p>
+      <p>
+        The soil profiles that you get from MarkSim GCM are not the mean of profiles for that soil type, or the representative soil profile for that soil type within a country. They are the most representative of all the profiles in the WISE database for a given soil type. Even for countries with soil profiles in the WISE database, there is no guarantee that the representative soil profile will be from that country. Therefore, having no profiles in WISE does not mean that your country is not represented.
+      </p>
+      <p>
+        The scientific reliability of this approach is, of course, somewhat of a lottery. However, I would suggest that for a 0.5-degree resolution over extended areas, the chances of WISE profiles coming from similar geologies and climates are high; if we assume a central tendency in the soils data then the most representative will be the most probable. In any case at this level of precision you will get several soil types with their respective probable areas.
+      </p>
+      <p>
+        You can regard this as an area or a probability of occurrence. I would call it probability and treat your simulation results in the same way; thus, you will get a range of probable outcomes, which is always easier to handle than separate results by soil type.
+      </p>
+      <p>
+        <strong>Q6: Is MarkSim GCM data downscaled and what method is used?</strong>
+      </p>
+      <p>
+        Yes, the GCM data is downscaled. Downscaling involves two different aspects. A GCM models climate on a coarse grid (usually between 1 and 2 degrees) as energy transfers within and between large columns of atmosphere. To represent the weather these must be matched to daily weather parameters at the site of interest and the data must be interpolated from the coarse grid to a more precise one.
+      </p>
+      <p>
+        MarkSim GCM works on the differences between the baseline and future predictions. I fit a 5th order polynomial to each pixel in the GCM output to get the time trend and use a cubic convolution to interpolate to the smaller grid which is 30 arc seconds or roughly 1 km. The recalculated differences are added to the baseline (in our case WorldClim v1.03). This gives us the monthly average climate at the point. MarkSim is a third-order Markov rainfall model with autoregressive temperature and radiation estimation. This does the second part of the downscaling to daily weather data.
+      </p>
+      <p>
+        <strong>Q7: In MarkSim we can get future data up to 2095. Is is it available up to 2099?</strong>
+      </p>
+      <p>
+        Unfortunately, 2095 is the last GCM point that went into the equations that run the simulation. If I allowed it to go to 2099, the last 4 years would be an extrapolation; this is similar to how I can’t do the years before 2010. In the user notes, it states that you can get 99 years of replication data but those are true replications of the chosen year.
+      </p>
+      <p>
+        <strong>Q8: When one chooses multiple models, does it average the values for the days?</strong>
+      </p>
+      <p>
+        No, if it did that you would get a progressive dilution of the variance as you added in more models. It averages the polynomial functions that drive the GCM differences so that it produces correctly downscaled weather data for the average GCM.
+      </p>
+    </div>
+    <!-- jQuery first, then Tether, then Bootstrap JS. -->
+    <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+    <script src="js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+  </body>
+
+</html>
