@@ -331,7 +331,7 @@ function showSplash() {
             map: map
         })
     }
-    var contentString = "<div style='float:right;'></div><p align='center'><img src=\"./images/ILRI.jpg\"></center></p><br/><blockquote align='justify'>Welcome to the <b>MarkSim\u2122 DSSAT</b> weather file generator. This application uses the well-known <a href='http://gisweb.ciat.cgiar.org/marksim' target='_new'>MarkSim\u2122</a> application (<i>Jones & Thornton 2000, Jones et al 2002</i>) working off a 30 arc-second climate surface derived from WorldClim (<i>Hijmans et al 2005</i>). Point and click on the map and up to 99 WTG files are prepared ready for use with <a href='http://icasa.net/dssat/index.html' target='_new'>DSSAT \u00ae.</a> Download and unpack to a directory on your machine and they are ready for use with the DSSAT4 crop modelling system (<i>Hoogenboom et al 2003</i>).<br/><br/><a href='docs/doc.html' target='blank'>more info...</a></blockquote><br/>";
+    var contentString = "<div style='float:right;'></div><p align='center'><img src=\"./images/ILRI.jpg\"></center></p><br/><blockquote align='justify'>Welcome to the <b>MarkSim\u2122 DSSAT</b> weather file generator. This application uses the well-known <a href='http://gismap.ciat.cgiar.org/marksim' target='_new'>MarkSim\u2122</a> application (<i>Jones & Thornton 2000, Jones et al 2002</i>) working off a 30 arc-second climate surface derived from WorldClim (<i>Hijmans et al 2005</i>). Point and click on the map and up to 99 WTG files are prepared ready for use with <a href='http://icasa.net/dssat/index.html' target='_new'>DSSAT \u00ae.</a> Download and unpack to a directory on your machine and they are ready for use with the DSSAT4 crop modelling system (<i>Hoogenboom et al 2003</i>).<br/><br/><a href='docs/doc.html' target='blank'>more info...</a></blockquote><br/>";
     infoWindow = new google.maps.InfoWindow({
         content: contentString
     });
@@ -875,7 +875,7 @@ function displayResult(a, b) {
     var c = a.value.url,
         d = document.forms.input_form.clxout.checked;
     if (c && !0 == d) {
-        "e:arcgisserver" == c.substring(0, 16) && (c = c.replace("e:arcgisserver", "http://gisweb.ciat.cgiar.org"));
+        "q:arcgisserver" == c.substring(0, 16) && (c = c.replace("q:arcgisserver", "http://gismap.ciat.cgiar.org"));
         d = getFileDirectory(c);
         c = getFormattedName(Place);
         8 > c.length && (c += "________");
@@ -896,7 +896,7 @@ function displayResult(a, b) {
         $("html, body").stop().animate({
             scrollTop: $("#CLXResults").offset().top
         }, 1E3)
-    } else c && !1 == d && ("e:arcgisserver" == c.substring(0, 16) && (c = c.replace("e:arcgisserver", "http://gisweb.ciat.cgiar.org")), d = getFileDirectory(c), OutDir = d + "/" + Place, e = d + "/" + Place + ".zip", el("btnDownload").innerHTML = "<h3>Data with (" + NumRep + ") replications in a zip file. Click on the icon to start download</h3><a href='" + e + "'><img src='images/zip-icon.jpg' style='width:80;border:0;margin:0;'></a>", el("td_SoilResult").style.display = "none",
+    } else c && !1 == d && ("q:arcgisserver" == c.substring(0, 16) && (c = c.replace("q:arcgisserver", "http://gismap.ciat.cgiar.org")), d = getFileDirectory(c), OutDir = d + "/" + Place, e = d + "/" + Place + ".zip", el("btnDownload").innerHTML = "<h3>Data with (" + NumRep + ") replications in a zip file. Click on the icon to start download</h3><a href='" + e + "'><img src='images/zip-icon.jpg' style='width:80;border:0;margin:0;'></a>", el("td_SoilResult").style.display = "none",
         el('SoilResults').innerHTML = "", el("td_results").style.display = "",
         el("shResults").style.display = "", currentFile = "CLIM0101", showClimateFileData("CLIM0101"), el("runClimateDiagram").style.display = "block", el("soildata").style.display = "block", el("runmodel").innerHTML = '<input type="button" id="BtnRun" value="Run Model" onclick="javascript:RunModel();" class="ui-button ui-widget ui-state-default ui-corner-all" role="button" aria-disabled="false">', $("html, body").stop().animate({
         scrollTop: $("#ClimateResults").offset().top
@@ -944,7 +944,7 @@ function statusDiagramCallback(a) {
 function completeDiagramCallback(a) {
     gp2.getResultData(a.jobId, "Return_Code", function (b) {
         b = b.value.toString();
-        "Process finished successfully" != b.split(">")[1] ? alert(b) : (gp2.getResultData(a.jobId, "Climate_Diagram_Data", function (a) {
+        " Process finished successfully" != b.split(">")[1] ? alert(b) : (gp2.getResultData(a.jobId, "Climate_Diagram_Data", function (a) {
         }), gp2.getResultData(a.jobId, "All_Charts_in_PDF", function (a) {
             if (a = a.value.url) {
                 var b = getFileDirectory(a);
@@ -1119,15 +1119,16 @@ function computeSoilsService(a, b) {
 }
 
 function statusCallbackSoil(a) {
-    //console.log("return status", a);
+    // console.log("return status", a);
     "esriJobFailed" == a.jobStatus && (console.log("Processing Soils Job Failed. Please try again..."), alert("Processing Soils Job Failed. Please try again..."));
 }
 
 function completeCallbackSoil(a) {
-    //console.log("return status", a);
-    gp3.getResultData(a.jobId, "ReturnCode",
+    // console.log("return status", a);
+	    gp3.getResultData(a.jobId, "ReturnCode",
         function (b) {
             var c = b.value.toString()
+			console.log(c);
             if (b.value.toString() != "\"0 -> Process finished successfully\"") {
                 el("runClimateDiagram").style.display = "block"
                 el("soildata").style.display = "block"
@@ -1154,7 +1155,7 @@ function displaySoilResult(a) {
     el('SoilResults').innerHTML = "<h3>Soil File</h3><br/><p style='text-align:justify; padding-left: 15%; padding-right:15%;'>Here we use the Harmonized World Soil Database (HWSD), the most up-to-date world soil map \n\
     (FAO, 2012). It incorporates a data table of 48,148 soil profile descriptions related to the various soils associated with each mapping unit, at a spatial resolution of 30 \n\
     arc-seconds (approximately 1 km at the  equator).</p>  \n\
-    <a target='_blank' href='http://gisweb.ciat.cgiar.org/arcgis/rest/directories/arcgisjobs/soils_gpserver/" + a.jobId + "/scratch/soilzip.zip'>  \n\
+    <a target='_blank' href='http://gismap.ciat.cgiar.org:6080/arcgis/rest/directories/arcgisjobs/soils_gpserver/" + a.jobId + "/scratch/soilzip.zip'>  \n\
         <img src='images/ZIPx64.png' style='width: 80px; margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; border-top-width: 0px; border-right-width: 0px; border-bottom-width: 0px; border-left-width: 0px; border-top-style: none; border-right-style: none; border-bottom-style: none; border-left-style: none;'>\n\
     </a>";
     $("html, body").stop().animate({
@@ -1169,7 +1170,7 @@ function create_soilzip(soil, soilproportions) {
     location.href = "data:application/zip;base64," + content;
 }
 function datasoil(url) {
-    var newurl = "http://gisweb.ciat.cgiar.org/arcgis/rest/directories/arcgisjobs/soils_gpserver/" + url + "/scratch/";
+    var newurl = "http://gismap.ciat.cgiar.org/arcgis/rest/directories/arcgisjobs/soils_gpserver/" + url + "/scratch/";
     var soilurl = newurl + "soil.sol"
     var proportionurl = newurl + "soil.proportions.txt"
     var soil, soilproportions;
